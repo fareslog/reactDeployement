@@ -28,6 +28,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
+          target: builder
           push: false
           tags: fares548/react-cicd-github:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
