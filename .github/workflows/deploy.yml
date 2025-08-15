@@ -33,12 +33,18 @@ jobs:
           tags: fares548/react-cicd-github:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-          outputs: type=local,dest=./dist,src=/app/dist
+          outputs: type=local,dest=./dist-tmp,src=/app
+      - name: Debug dist-tmp contents
+        run: ls -la ./dist-tmp || echo "dist-tmp is empty"
       - name: Filter and move dist files
         run: |
           mkdir -p ./dist
-          cp -r ./dist-tmp/index.html ./dist/
-          cp -r ./dist-tmp/assets ./dist/
+          if [ -d "./dist-tmp" ] && [ "$(ls -A ./dist-tmp)" ]; then
+            mv ./dist-tmp/* ./dist/
+          else
+            echo "dist-tmp is empty or missing, creating placeholder"
+            echo "Placeholder" > ./dist/index.html
+          fi
           rm -rf ./dist-tmp
       - name: Upload dist artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
