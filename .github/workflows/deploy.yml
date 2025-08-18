@@ -19,7 +19,7 @@ jobs:
           context: .
           file: ./Dockerfile
           target: export-stage
-          outputs: type=local,dist=./dist
+          outputs: type=local,dest=./dist
 
       - name: Verify dist content
         run: |
